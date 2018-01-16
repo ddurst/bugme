@@ -1,0 +1,18 @@
+{
+
+  "extensionName": {
+    "message": "Open bugs in BMO",
+    "description": "Name of the extension"
+  },
+
+  "extensionDescription": {
+    "message": "Opens selected bug numbers in bugzilla.",
+    "description": "Description of the add-on."
+  },
+
+  "contextMenuItem": {
+    "message": "Open bug IDs in BMO",
+    "description": "Title of context menu item that opens the selected text as bugs in BMO when clicked."
+  }
+
+}
