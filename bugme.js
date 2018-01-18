@@ -27,13 +27,17 @@ The click event listener
 browser.menus.onClicked.addListener((info, tab) => {
   switch (info.menuItemId) {
     case "bugme":
+       /* Don't capture numbers from yyyy-mm-dd, but 
+          there are open bugs matching \d{3}. */
       var bugnums = [],
           temp,
           i=0,
           url='https://bugzilla.mozilla.org/',
-          re = RegExp('(\\d{4,7})','g');
+          re = RegExp('((?!\\d{3,4}-\\d{2}-\\d{2})\\d{3,7})','g');
       while ((temp = re.exec(info.selectionText)) !== null) {
-        bugnums.push(temp[0]);
+        if (bugnums.indexOf(temp[0]) < 0) {
+          bugnums.push(temp[0]);
+        }
       }
       if (bugnums.length > 0) {
         function onError(error) {
