@@ -1,18 +1,28 @@
 {
 
   "extensionName": {
-    "message": "Open bugs in BMO",
+    "message": "Open bug IDs",
     "description": "Name of the extension"
   },
 
   "extensionDescription": {
-    "message": "Opens selected bug numbers in bugzilla.",
+    "message": "Opens selected bug numbers in bugzilla.mozilla.org (and optionally in GitHub).",
     "description": "Description of the add-on."
   },
 
   "contextMenuItem": {
-    "message": "Open bug IDs in BMO",
+    "message": "Open bugs in BMO",
+    "description": "Title of single context menu item that opens the selected text as bugs in BMO when clicked and no GitHub repos are specified."
+  },
+
+  "contextMenuItem1": {
+    "message": "in BMO",
     "description": "Title of context menu item that opens the selected text as bugs in BMO when clicked."
+  },
+
+  "contextMenuItem2": {
+    "message": "in GitHub",
+    "description": "Title of context menu item that opens the selected text as bugs in GitHub (using options) when clicked."
   }
 
 }
