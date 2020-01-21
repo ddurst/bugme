@@ -15,8 +15,10 @@ function saveOptions(e) {
 function restoreOptions() {
   var storageItem = browser.storage.local.get('repos');
   storageItem.then((res) => {
-    document.querySelector("#currentstring").innerText = res.repos;
-    document.querySelector("#repostring").innerText = res.repos;
+    if (res.repos != undefined) {
+       document.querySelector("#currentstring").setAttribute("value", res.repos);
+       document.querySelector("#repostring").innerText = res.repos;
+    }
   });
 }
 

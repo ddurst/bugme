@@ -3,13 +3,35 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <style>
+    button {
+       background-color: green;
+       border: 1px solid black;
+       border-radius: 5px;
+       color: white;
+       display: block;
+       line-height: 180%;
+       margin-top: 5px;
+    }
+    label {
+       display: block;
+       font-weight: bold;
+       vertical-align: top;
+    }
+    textarea {
+       height: 20vw;
+       margin-top: 5px;
+       padding: 3px;
+       width: 80vw;
+    }
+    </style>
   </head>
 
 <body>
   <p>You must have access to any repositories you specify here in order for these options to work. Enter the name path to repos in Markdown ([name](url)), using semicolons to separate multiple options.</p>
   <form>
       <label>GitHub Repository options</label>
-      <input type="text" id="repostring" />
+      <textarea id="repostring"></textarea>
       <button type="submit">Save</button>
       <input id="currentstring" type="hidden" value="" />
   </form>
