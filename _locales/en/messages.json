@@ -6,13 +6,13 @@
   },
 
   "extensionDescription": {
-    "message": "Opens selected bug numbers in bugzilla.mozilla.org (and optionally in GitHub).",
+    "message": "Opens selected bug numbers in bugzilla.mozilla.org (and optionally in GitHub and Jira).",
     "description": "Description of the add-on."
   },
 
   "contextMenuItem": {
     "message": "Open bugs in BMO",
-    "description": "Title of single context menu item that opens the selected text as bugs in BMO when clicked and no GitHub repos are specified."
+    "description": "Title of single context menu item that opens the selected text as bugs in BMO when clicked and no GitHub repos or Jira projects are specified."
   },
 
   "contextMenuItem1": {
@@ -23,6 +23,11 @@
   "contextMenuItem2": {
     "message": "in GitHub",
     "description": "Title of context menu item that opens the selected text as bugs in GitHub (using options) when clicked."
+  },
+
+  "contextMenuItem3": {
+    "message": "in Jira",
+    "description": "Title of context menu item that opens the selected text as item in Jira (using options) when clicked."
   }
 
 }

@@ -1,9 +1,16 @@
 function saveOptions(e) {
-  var entry = document.querySelector("#repostring").value,
-      saved = document.querySelector("#currentstring").value;
-  if (entry.trim() != saved.trim()) {
+  let repoEntry = document.querySelector("#repostring").value,
+      repoSaved = document.querySelector("#currentrepostring").value;
+  if (repoEntry.trim() != repoSaved.trim()) {
     browser.storage.local.set({
       repos: document.querySelector("#repostring").value
+    });
+  }
+  let projectEntry = document.querySelector("#repostring").value,
+      projectSaved = document.querySelector("#currentrepostring").value;
+  if (projectEntry.trim() != projectSaved.trim()) {
+    browser.storage.local.set({
+      projects: document.querySelector("#repostring").value
     });
   }
   browser.runtime.sendMessage({
@@ -13,11 +20,18 @@ function saveOptions(e) {
 }
 
 function restoreOptions() {
-  var storageItem = browser.storage.local.get('repos');
-  storageItem.then((res) => {
+  let storageItemRepo = browser.storage.local.get('repos'),
+      storageItemProject = browser.storage.local.get('projects');
+  storageItemRepo.then((res) => {
     if (res.repos != undefined) {
-       document.querySelector("#currentstring").setAttribute("value", res.repos);
+       document.querySelector("#currentrepostring").setAttribute("value", res.repos);
        document.querySelector("#repostring").innerText = res.repos;
+    }
+  });
+  storageItemProject.then((res) => {
+    if (res.projects != undefined) {
+       document.querySelector("#currentprojectstring").setAttribute("value", res.projects);
+       document.querySelector("#projectstring").innerText = res.projects;
     }
   });
 }

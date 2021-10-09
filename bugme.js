@@ -1,6 +1,9 @@
 'use strict'
 
-var repostring = '', submenus = [];
+let repostring = '', 
+    projectstring = '',
+    ghSubmenus = [],
+    jiraSubmenus = [];
 
 //browser.runtime.onStartup.addListener(loadOptions);
 
@@ -21,17 +24,24 @@ browser.runtime.onMessage.addListener(handleMessage);
 Load options data and populate repostring
 */
 function loadOptions() {
-  var gettingItem = browser.storage.local.get('repos');
-  gettingItem.then((res) => {
+  let gettingItemRepo = browser.storage.local.get('repos'),
+      gettingItemProject = browser.storage.local.get('projects');
+  gettingItemRepo.then((res) => {
     repostring = res.repos || '';
-//    console.log("repostring follows:");
-//    console.log(repostring);
+//    console.log(`repostring follows: ${repostring}`);
     if (repostring.length) {
       recreateMenu();
       createSubmenus();
     }
   });
-//  repostring = "[Monitor](https://github.com/mozilla/blurts-server/); [Lockwise Android](https://github.com/mozilla-lockwise/lockwise-android/); [Lockwise iOS](https://github.com/mozilla-lockwise/lockwise-ios/)";
+  gettingItemProject.then((res) => {
+    projectstring = res.projects || '';
+//    console.log(`projectstring follows: ${projectstring}`);
+    if (projectstring.length) {
+      recreateMenu();
+      createSubmenus();
+    }
+  });
 }
 
 
@@ -58,8 +68,12 @@ Remove all submenus because the options may redefine them
 function removeSubmenus() {
   browser.menus.remove("bugme");
   browser.menus.remove("bugme_gh");
-  for (var i=0; i<submenus.length; i++) {
+  for (var i=0; i<ghSubmenus.length; i++) {
     browser.menus.remove("bugme_gh-" + i);
+  };
+  browser.menus.remove("bugme_jira");
+  for (var i=0; i<jiraSubmenus.length; i++) {
+    browser.menus.remove("bugme_jira-" + i);
   };
 }
 
@@ -94,25 +108,46 @@ function recreateMenu() {
 Create submenu if options are set
 */
 function createSubmenus() {
-    browser.menus.create({
-      id: "bugme_gh",
-      title: browser.i18n.getMessage("contextMenuItem2"),
-      contexts: ["selection"]
-    });
-    var subitems = repostring.split(/; ?/);
-    var re = RegExp('\\[([^\\]]+)\\]\\(([^\\)]+)\\)', 'g');    // [name](url)
-    for (var i=0; i<subitems.length; i++) {
-      var options;
-      while ((options = re.exec(subitems[i])) !== null) {
-        submenus[i] = { name: options[1], url: options[2] };
-        browser.menus.create({
-          id: "bugme_gh-" + i,
-          parentId: "bugme_gh",
-          title: options[1],
-          contexts: ["selection"]
-        });
-      };
+  // github repos
+  browser.menus.create({
+    id: "bugme_gh",
+    title: browser.i18n.getMessage("contextMenuItem2"),
+    contexts: ["selection"]
+  });
+  let subitems = repostring.split(/; ?/);
+  let re = RegExp('\\[([^\\]]+)\\]\\(([^\\)]+)\\)', 'g');    // [name](url)
+  for (let i=0; i<subitems.length; i++) {
+    let options;
+    while ((options = re.exec(subitems[i])) !== null) {
+      ghSubmenus[i] = { name: options[1], url: options[2] };
+      browser.menus.create({
+        id: "bugme_gh-" + i,
+        parentId: "bugme_gh",
+        title: options[1],
+        contexts: ["selection"]
+      });
     };
+  };
+  // jira projects
+  browser.menus.create({
+    id: "bugme_jira",
+    title: browser.i18n.getMessage("contextMenuItem3"),
+    contexts: ["selection"]
+  });
+  subitems = projectstring.split(/; ?/);
+  re = RegExp('\\[([^\\]]+)\\]\\(([^\\)]+)\\)', 'g');    // [name](url)
+  for (let i=0; i<subitems.length; i++) {
+    let options;
+    while ((options = re.exec(subitems[i])) !== null) {
+      jiraSubmenus[i] = { name: options[1], url: options[2] };
+      browser.menus.create({
+        id: "bugme_jira-" + i,
+        parentId: "bugme_jira",
+        title: options[1],
+        contexts: ["selection"]
+      });
+    };
+  };
 }
 
 
@@ -123,8 +158,9 @@ createMenu();
 The click event listener
 */
 browser.menus.onClicked.addListener((info, tab) => {
-  var reBMO = RegExp('((?!\\d{3,4}-\\d{2}-\\d{2})\\d{4,7})', 'g');
-  var reGH = RegExp('((?!\\d{3,4}-\\d{2}-\\d{2})\\d{1,7})', 'g');
+  let reJIRA = RegExp('((?!\\d{4}-\\d{2}-\\d{2})[A-Z]{3,}-\\d{1,5})', 'g'); // XYZ-#
+  let reGH = RegExp('((?!\\d{4}-\\d{2}-\\d{2})\\d{1,7})', 'g'); // #######
+  let reBMO = RegExp('((?!\\d{4}-\\d{2}-\\d{2})\\d{3,7})', 'g'); // ####
   if (info.menuItemId == "bugme") {
     /* Don't capture numbers from yyyy-mm-dd, but 
        there are open bugs matching \d{3}. */
@@ -158,6 +194,41 @@ browser.menus.onClicked.addListener((info, tab) => {
       queryTabs.then(insertTab, onError);
     }
   } else {
+    if (info.parentMenuItemId == "bugme_jira") {
+    /* Handle cases where submenu items of Jira are clicked */
+    /* Don't capture numbers from yyyy-mm-dd, but
+       Jira keys can be as small as \d{1}, though they 
+       should all be preceded by [A-Z]{3,}-. */
+       // you are here
+      var issues = [],
+          temp,
+          i = parseInt(info.menuItemId.split('-')[1], 10);
+      var url = submenus[i].url;
+      if (url.slice(-1) != "/") { // terminating /
+        url += "/";
+      }
+      while ((temp = reJIRA.exec(info.selectionText)) !== null) {
+        if (issues.indexOf(temp[0]) < 0) {
+          issues.push(temp[0]);
+        }
+      }
+      if (issues.length > 0) {
+        function onError(error) {
+          console.log(`Error: ${error}`);
+        }
+        function insertTab(tabs) {
+          for (let tab of tabs) {
+            var newIndex = tab.index + 1;
+            browser.tabs.create({url: `${url}`, index: newIndex});
+          }
+        }
+        switch (issues.length) {
+          case 1:
+            console.log("case 1");
+            url += // you are here
+        }
+      }
+    }
     if (info.parentMenuItemId == "bugme_gh") {
     /* Handle cases where submenu items of GH are clicked */
     /* Don't capture numbers from yyyy-mm-dd, but
