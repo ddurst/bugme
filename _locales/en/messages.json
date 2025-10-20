@@ -1,33 +1,46 @@
 {
+	"extensionName": {
+		"message": "Open bug IDs",
+		"description": "Name of the extension"
+	},
 
-  "extensionName": {
-    "message": "Open bug IDs",
-    "description": "Name of the extension"
-  },
+	"extensionDescription": {
+		"message": "Opens selected bug numbers in Bugzilla, and optionally in GitHub and Jira.",
+		"description": "Description of the add-on."
+	},
 
-  "extensionDescription": {
-    "message": "Opens selected bug numbers in bugzilla.mozilla.org (and optionally in GitHub and Jira).",
-    "description": "Description of the add-on."
-  },
+	"contextMenuItem": {
+		"message": "Open bugs in",
+		"description": "Title of parent context menu item when more than one type is enabled."
+	},
 
-  "contextMenuItem": {
-    "message": "Open bugs in BMO",
-    "description": "Title of single context menu item that opens the selected text as bugs in BMO when clicked and no GitHub repos or Jira projects are specified."
-  },
+	"contextMenuItemB": {
+		"message": "Open bugs in Bugzilla",
+		"description": "Title of single context menu item that opens the selected text as bugs in Bugzilla when clicked (and no GitHub repos or Jira instances are specified)."
+	},
 
-  "contextMenuItem1": {
-    "message": "in BMO",
-    "description": "Title of context menu item that opens the selected text as bugs in BMO when clicked."
-  },
+	"contextMenuItemJ": {
+		"message": "Open items in Jira",
+		"description": "Title of single context menu item that opens the selected text as items in Jira when clicked (and no GitHub repos or Bugzilla instances are specified)."
+	},
 
-  "contextMenuItem2": {
-    "message": "in GitHub",
-    "description": "Title of context menu item that opens the selected text as bugs in GitHub (using options) when clicked."
-  },
+	"contextMenuItemG": {
+		"message": "Open issues in GitHub",
+		"description": "Title of single context menu item that opens the selected text as issues in GitHub when clicked (and no Bugzilla or Jira instances are specified)."
+	},
 
-  "contextMenuItem3": {
-    "message": "in Jira",
-    "description": "Title of context menu item that opens the selected text as item in Jira (using options) when clicked."
-  }
+	"contextMenuItemB+": {
+		"message": "Bugzilla",
+		"description": "Title of context submenu item that opens the selected text as bugs in Bugzilla when clicked (and another option exists)."
+	},
 
+	"contextMenuItemJ+": {
+		"message": "Jira",
+		"description": "Title of context submenu item that opens the selected text as item in Jira when clicked (and another option exists)."
+	},
+
+	"contextMenuItemG+": {
+		"message": "GitHub",
+		"description": "Title of context submenu item that opens the selected text as bugs in GitHub when clicked (and another option exists)."
+	}
 }

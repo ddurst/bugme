@@ -1,46 +1,72 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <meta charset="utf-8">
-    <style>
-    button {
-       background-color: green;
-       border: 1px solid black;
-       border-radius: 5px;
-       color: white;
-       display: block;
-       line-height: 180%;
-       margin-top: 5px;
-    }
-    label {
-       display: block;
-       font-weight: bold;
-       vertical-align: top;
-    }
-    textarea {
-       height: 20vw;
-       margin-top: 5px;
-       padding: 3px;
-       width: 80vw;
-    }
-    </style>
-  </head>
+	<head>
+		<meta charset="utf-8">
+		<style>
+		p, label {
+			font-family: Helvetica, Airal, sans-serif;
+			font-size: 90%;
+		}
+		p#status {
+			font-size: 70%;
+			padding-top: 10px;
+		}
+		label {
+			padding: 6px;
+		}
+		button {
+			background-color: #008000;
+			border: 1px solid #006000;
+			border-radius: 5px;
+			color: white;
+			display: block;
+			line-height: 180%;
+			margin-top: 5px;
+		}
+		button:disabled {
+			background-color: #ccc;
+			border: 1px solid #999;
+		}
+		label {
+			display: block;
+			font-weight: bold;
+			vertical-align: top;
+		}
+		textarea {
+			height: 20vw;
+			margin-top: 5px;
+			padding: 3px;
+			width: 80vw;
+		}
+		input {
+			width: 60vw;
+		}
+		</style>
+	</head>
 
 <body>
-  <p>You must have access to any repositories you specify here in order for these options to work. Enter the name path to repos in Markdown ([name](url)), using semicolons to separate multiple options.</p>
-  <form>
-      <label>GitHub repository options</label>
-      <textarea id="repostring"></textarea>
-      <input id="currentrepostring" type="hidden" value="" />
+	<p>You must have access to any repositories and projects you specify here in order for these options to work. This extension won't verify your access. Include the protocol and trailing slashes in all values.</p>
+	<p>Enter the path to a Bugzilla instance, including the protocol.</p>
+	<p>Enter the name and path to GitHub repos in Markdown ([name](url)), using semicolons to separate multiple options.</p>
+	<p>Enter the path to a Jira instance (everything up to the project); you can have Jira set up only for one instance.</p>
+	<form>
+			<label>Bugzilla URL
+				<input id="bz_instance" /></label>
+			<input id="current_bz_instance" type="hidden" value="" />
 
-      <label>Jira project options</label>
-      <textarea id="projectstring"></textarea>
-      <input id="currentprojectstring" type="hidden" value="" />
+			<label>GitHub repo(s)
+				<textarea id="gh_repo"></textarea></label>
+			<input id="current_gh_repo" type="hidden" value="" />
 
-      <button type="submit">Save</button>
-    </form>
-  <script src="options.js"></script>
+			<label>Jira instance
+				<input id="jira_instance" /></label>
+			<input id="current_jira_instance" type="hidden" value="" />
+
+			<button type="submit">Save</button>
+		</form>
+	<p id="status">&nbsp;</p>
+	<script src="options.js"></script>
 </body>
 
 </html>
